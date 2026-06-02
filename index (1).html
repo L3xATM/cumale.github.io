@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎂 Quiz de Cumpleaños — Para ti, hermanita fav 🖤 </title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg-dark: #0a0a0f;
+    --bg-card: rgba(18, 18, 28, 0.85);
+    --accent: #c8a2ff;
+    --accent2: #7b5ea7;
+    --accent3: #f0c27f;
+    --text: #e8e0f0;
+    --text-dim: #9990a8;
+    --glow: rgba(200, 162, 255, 0.15);
+    --correct: #6ecf8e;
+    --wrong: #e06070;
+    --gold: #f0c27f;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════ PARTICLES BG ═══════════════ */
+  #particles-canvas {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    z-index: 0; pointer-events: none;
+  }
+
+  /* ═══════════════ GLOBAL CONTAINER ═══════════════ */
+  .game-container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+  }
+
+  /* ═══════════════ SCREENS ═══════════════ */
+  .screen {
+    display: none;
+    animation: fadeInUp 0.8s ease;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeInUp {
+    from { opacity:0; transform: translateY(30px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity:0; }
+    to { opacity:1; }
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14% { transform: scale(1.15); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.15); }
+  }
+  @keyframes glow-border {
+    0%,100% { box-shadow: 0 0 15px rgba(200,162,255,0.2), inset 0 0 15px rgba(200,162,255,0.05); }
+    50% { box-shadow: 0 0 30px rgba(200,162,255,0.4), inset 0 0 30px rgba(200,162,255,0.1); }
+  }
+  @keyframes typewriter {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  @keyframes confetti-fall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity:1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity:0; }
+  }
+
+  /* ═══════════════ COVER SCREEN ═══════════════ */
+  .cover-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .cover-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: var(--bg-dark);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 30px;
+    margin-bottom: 30px;
+  }
+
+  .cover-emoji {
+    font-size: 4rem;
+    animation: float 3s ease-in-out infinite;
+    margin-bottom: 20px;
+  }
+
+  .cover-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 15px;
+    background: linear-gradient(135deg, #fff, var(--accent), var(--gold));
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+
+  .cover-subtitle {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 30px;
+    opacity: 0.9;
+  }
+
+  .cover-photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    max-width: 400px;
+    margin: 0 auto 35px;
+    perspective: 1000px;
+  }
+  .cover-photos img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(200,162,255,0.2);
+    transition: transform 0.5s, border-color 0.5s;
+  }
+  .cover-photos img:hover {
+    transform: scale(1.05) rotate(-2deg);
+    border-color: var(--accent);
+  }
+
+  .cover-quote {
+    font-family: 'Caveat', cursive;
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 500px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+
+  .btn-start {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 16px 40px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    animation: pulse 2s ease-in-out infinite;
+    box-shadow: 0 4px 25px rgba(200,162,255,0.3);
+  }
+  .btn-start:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 35px rgba(200,162,255,0.5);
+  }
+
+  /* ═══════════════ INSTRUCTIONS SCREEN ═══════════════ */
+  .instructions-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(200,162,255,0.12);
+    border-radius: 20px;
+    padding: 40px 30px;
+    margin: 30px 0;
+    backdrop-filter: blur(20px);
+  }
+
+  .instructions-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: var(--accent);
+  }
+
+  .step {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 22px;
+    padding: 15px;
+    background: rgba(200,162,255,0.04);
+    border-radius: 12px;
+    border-left: 3px solid var(--accent);
+    transition: background 0.3s;
+  }
+  .step:hover { background: rgba(200,162,255,0.08); }
+
+  .step-number {
+    flex-shrink: 0;
+    width: 35px; height: 35px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+
+  .step-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .step-text strong { color: var(--accent); }
+
+  .btn-next {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 35px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+  }
+  .btn-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(200,162,255,0.4);
+  }
+
+  /* ═══════════════ ROUND HEADER ═══════════════ */
+  .round-header {
+    text-align: center;
+    padding: 50px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .round-number {
+    font-size: 0.75rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .round-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .round-quote {
+    font-family: 'Caveat', cursive;
+    font-size: 1.4rem;
+    color: var(--gold);
+    max-width: 550px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+    padding: 20px;
+    border: 1px solid rgba(240,194,127,0.15);
+    border-radius: 15px;
+    background: rgba(240,194,127,0.04);
+  }
+
+  .round-quote-attr {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 30px;
+    font-style: italic;
+  }
+
+  .round-photo {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--accent);
+    margin-bottom: 30px;
+    animation: glow-border 3s ease-in-out infinite;
+  }
+
+  .round-desc {
+    font-size: 0.95rem;
+    color: var(--text-dim);
+    max-width: 500px;
+    line-height: 1.7;
+    margin-bottom: 35px;
+  }
+
+  /* ═══════════════ QUESTION CARD ═══════════════ */
+  .question-section {
+    padding: 30px 0;
+  }
+
+  .progress-bar-container {
+    width: 100%;
+    height: 4px;
+    background: rgba(200,162,255,0.1);
+    border-radius: 10px;
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), var(--gold));
+    border-radius: 10px;
+    transition: width 0.6s ease;
+  }
+
+  .question-counter {
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .question-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(200,162,255,0.1);
+    border-radius: 20px;
+    padding: 35px 30px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(20px);
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-bottom: 25px;
+    color: #fff;
+  }
+
+  .question-context {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    background: rgba(200,162,255,0.05);
+    border-radius: 10px;
+    border-left: 2px solid var(--accent);
+    font-style: italic;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(200,162,255,0.05);
+    border: 1px solid rgba(200,162,255,0.1);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: left;
+  }
+  .option-btn:hover {
+    background: rgba(200,162,255,0.12);
+    border-color: var(--accent);
+    transform: translateX(5px);
+  }
+  .option-btn .opt-letter {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    background: rgba(200,162,255,0.15);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .option-btn.correct {
+    background: rgba(110,207,142,0.15);
+    border-color: var(--correct);
+    color: var(--correct);
+  }
+  .option-btn.correct .opt-letter {
+    background: var(--correct);
+    color: var(--bg-dark);
+  }
+  .option-btn.wrong {
+    background: rgba(224,96,112,0.1);
+    border-color: var(--wrong);
+    opacity: 0.6;
+  }
+  .option-btn.disabled { pointer-events: none; }
+
+  .answer-reveal {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    background: rgba(110,207,142,0.06);
+    border: 1px solid rgba(110,207,142,0.15);
+    border-radius: 12px;
+    animation: fadeIn 0.5s ease;
+  }
+  .answer-reveal.show { display: block; }
+
+  .answer-reveal p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .answer-reveal .emoji-big {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  /* ═══════════════ TRANSITION SCREENS ═══════════════ */
+  .transition-screen {
+    text-align: center;
+    padding: 60px 20px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .transition-quote {
+    font-family: 'Caveat', cursive;
+    font-size: 1.8rem;
+    color: var(--gold);
+    max-width: 550px;
+    line-height: 1.5;
+    margin: 30px 0;
+    padding: 30px;
+    border: 1px solid rgba(240,194,127,0.15);
+    border-radius: 20px;
+    background: rgba(240,194,127,0.03);
+    position: relative;
+  }
+  .transition-quote::before {
+    content: '❝';
+    font-size: 3rem;
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    color: rgba(240,194,127,0.3);
+  }
+
+  .transition-img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 15px;
+    border: 2px solid rgba(200,162,255,0.2);
+    margin: 20px 0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+
+  /* ═══════════════ FINAL SCREEN ═══════════════ */
+  .final-screen {
+    text-align: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .final-badge {
+    font-size: 0.7rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .final-heart {
+    font-size: 4rem;
+    animation: heartbeat 1.5s ease-in-out infinite;
+    margin-bottom: 20px;
+  }
+
+  .final-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, var(--gold), #fff, var(--accent));
+    background-size: 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+
+  .final-photos {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 35px;
+  }
+  .final-photos img {
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid rgba(240,194,127,0.3);
+    transition: transform 0.5s;
+  }
+  .final-photos img:nth-child(1) { transform: rotate(-3deg); }
+  .final-photos img:nth-child(2) { transform: rotate(2deg) translateY(-10px); }
+  .final-photos img:nth-child(3) { transform: rotate(-1deg); }
+  .final-photos img:nth-child(4) { transform: rotate(3deg) translateY(-10px); }
+
+  .final-message-box {
+    max-width: 620px;
+    background: var(--bg-card);
+    border: 1px solid rgba(240,194,127,0.15);
+    border-radius: 20px;
+    padding: 40px 35px;
+    margin: 0 auto 30px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-message-box::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent2), var(--accent), var(--gold), var(--accent));
+    background-size: 300%;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .final-message {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeIn 2s ease 0.5s forwards;
+  }
+
+  .final-sign {
+    font-family: 'Caveat', cursive;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin-top: 25px;
+    text-align: right;
+    opacity: 0;
+    animation: fadeIn 1s ease 3s forwards;
+  }
+
+  .final-song-note {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* ═══════════════ MUSIC PLAYER BAR ═══════════════ */
+  .music-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10,10,15,0.95);
+    border-top: 1px solid rgba(200,162,255,0.1);
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    display: none;
+  }
+  .music-bar.visible { display: flex; }
+
+  .music-bar .song-info {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+  .music-bar .song-info strong {
+    color: var(--accent);
+  }
+
+  .music-bar .eq-bars {
+    display: flex;
+    gap: 2px;
+    align-items: flex-end;
+    height: 18px;
+  }
+  .music-bar .eq-bars span {
+    width: 3px;
+    background: var(--accent);
+    border-radius: 2px;
+    animation: eq 0.8s ease-in-out infinite alternate;
+  }
+  .music-bar .eq-bars span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .music-bar .eq-bars span:nth-child(2) { height: 12px; animation-delay: 0.2s; }
+  .music-bar .eq-bars span:nth-child(3) { height: 8px; animation-delay: 0.4s; }
+  .music-bar .eq-bars span:nth-child(4) { height: 15px; animation-delay: 0.1s; }
+  .music-bar .eq-bars span:nth-child(5) { height: 10px; animation-delay: 0.3s; }
+
+  @keyframes eq {
+    from { height: 4px; }
+    to { height: 18px; }
+  }
+
+  /* ═══════════════ SCORE DISPLAY ═══════════════ */
+  .score-badge {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--bg-card);
+    border: 1px solid rgba(200,162,255,0.15);
+    border-radius: 15px;
+    padding: 10px 18px;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    backdrop-filter: blur(20px);
+  }
+  .score-badge.visible { display: flex; }
+  .score-badge .score-num {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 1.1rem;
+  }
+
+  /* ═══════════════ CONFETTI ═══════════════ */
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    z-index: 200;
+    animation: confetti-fall linear forwards;
+    pointer-events: none;
+  }
+
+  /* ═══════════════ RESPONSIVE ═══════════════ */
+  @media (max-width: 600px) {
+    .cover-title { font-size: 2rem; }
+    .round-title { font-size: 1.8rem; }
+    .final-title { font-size: 1.7rem; }
+    .transition-quote { font-size: 1.4rem; }
+    .question-text { font-size: 1.1rem; }
+    .final-message { font-size: 0.95rem; }
+    .final-photos img { width: 100px; height: 100px; }
+    .cover-photos { max-width: 300px; }
+  }
+
+  /* extra bottom padding for music bar */
+  .game-container { padding-bottom: 80px; }
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- ═══════════ MUSIC BAR ═══════════ -->
+<div class="music-bar" id="musicBar">
+  <div class="eq-bars">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <div class="song-info">
+    🎵 <strong>Babi — Colegas</strong> sonando de fondo
+  </div>
+</div>
+
+<!-- ═══════════ SCORE ═══════════ -->
+<div class="score-badge" id="scoreBadge">
+ 🖤 <span class="score-num" id="scoreNum">0</span><span>/12</span>
+</div>
+
+<div class="game-container">
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SCREEN 0: COVER                               -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-cover">
+    <div class="cover-screen">
+      <div class="cover-badge">Un juego hecho con el corazón</div>
+      <div class="cover-emoji">🎂</div>
+      <h1 class="cover-title">Feliz Cumpleaños,<br>MAD</h1>
+      <p class="cover-subtitle">Un quiz para demostrar que lo nuestro es para siempre</p>
+
+      <div class="cover-photos">
+        <img src="https://i.imgur.com/BKU2pjE.jpeg" alt="foto1">
+        <img src="https://i.imgur.com/vpo248T.jpeg" alt="foto2">
+        <img src="https://i.imgur.com/0Tvfh32.jpeg" alt="foto3">
+        <img src="https://i.imgur.com/Ra9ycoz.jpeg" alt="foto4">
+      </div>
+
+      <p class="cover-quote">
+        «Gracias por seguir año tras año conmigo de la manita» 🤝
+      </p>
+
+      <button class="btn-start" onclick="goTo('screen-instructions')">
+        Empezar 🖤 <span>→</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- SCREEN 1: INSTRUCTIONS                        -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-instructions">
+    <div style="padding: 40px 0;">
+      <div style="text-align:center; margin-bottom: 30px;">
+        <div class="cover-emoji">📋</div>
+        <h2 style="font-family:'Playfair Display',serif; font-size:2rem; color: var(--accent);">Antes de empezar...</h2>
+        <p style="color: var(--text-dim); margin-top: 8px; font-size: 0.95rem;">Lee esto con calma, es importante 🖤</p>
+      </div>
+
+      <div class="instructions-card">
+        <h2>🎧 Preparación</h2>
+
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-text">
+            <strong>Llámale por videollamada</strong> — Ya sea por FaceTime, Discord, WhatsApp o donde sea que os habléis siempre. Dile que has preparado algo especial para su cumpleaños y que necesitas que te preste atención unos minutos. Que se ponga cómodo. 🛋️
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-text">
+            <strong>Comparte pantalla</strong> — Abre esta página en tu navegador y comparte tu pantalla para que él también la vea. Si no podéis compartir pantalla, envíale el enlace para que lo abra a la vez que tú y vayáis avanzando juntos.
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-text">
+            <strong>Dale al play a <em>'Colegas' de Babi</em></strong> — Justo cuando avances a la primera ronda, pon la canción de fondo. Puede sonar bajita, solo para que la melodía acompañe cada pregunta. 🎵<br><br>
+            <a href="https://www.youtube.com/watch?v=zDcBO_RVU58" target="_blank" style="color: var(--accent); text-decoration: underline;">▶ YouTube — Babi: Colegas</a><br>
+            <a href="https://open.spotify.com/track/2cCAtgB5XDZJSRYzA6kmWY" target="_blank" style="color: var(--correct); text-decoration: underline;">▶ Spotify — Babi: Colegas</a>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-text">
+            <strong>Cómo funciona el Quiz</strong> — Hay <strong>4 rondas</strong> con <strong>3 preguntas cada una</strong>. Tú le lees la pregunta y él elige A, B, C o D. No importa si acierta o no... lo que importa es lo que va a sentir. Cada pregunta esconde un trozo de vuestra historia. 🖤
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-text">
+            <strong>El Gran Final</strong> — Cuando lleguéis al final, pon la canción de nuevo si se ha acabado. Y léele el mensaje despacio, con calma, mirándole a los ojos a través de la pantalla. Ese momento es para vosotros. 🥺
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">🎯</div>
+          <div class="step-text">
+            <strong>Consejo final:</strong> No tengas prisa. Tomaos vuestro tiempo en cada pregunta. Si sale alguna anécdota, dejad que fluya. Los mejores momentos del quiz serán las risas y las pausas entre pregunta y pregunta.
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="startQuiz()">
+          Estoy listo, ¡vamos! 🚀
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ROUND 1 INTRO                                 -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-r1-intro">
+    <div class="round-header">
+      <div class="round-number">Ronda 1 de 4</div>
+      <img src="https://i.imgur.com/BKU2pjE.jpeg" alt="" class="round-photo">
+      <h2 class="round-title">Los 15 años</h2>
+      <div class="round-quote">
+        «Es como si tuviese 15 años como cuando te conocí»
+      </div>
+      <p class="round-quote-attr">— Una de las frases que nos hemos dicho</p>
+      <p class="round-desc">
+        Esta ronda va de los inicios. De aquel momento en el que, sin saberlo, empezó algo que años después seguiría igual de fuerte. Vamos a ver cuánto recuerda tu amigo de cómo empezó todo. 🖤
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r1-q1')">Empezar ronda →</button>
+    </div>
+  </div>
+
+  <!-- ROUND 1 - Q1 -->
+  <div class="screen" id="screen-r1-q1">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 8.3%"></div></div>
+      <div class="question-counter">Ronda 1 · Pregunta 1 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🕰️ ¿En qué plataforma o lugar nos conocimos? ¿Cómo empezó todo entre nosotros?
+        </div>
+        <div class="question-context">
+          Pista: piensa en esa época, en lo que hacíamos con 15 años, dónde pasábamos las horas...
+        </div>
+        <div class="options" id="r1q1-options">
+          <button class="option-btn" onclick="answer(this,'r1q1','A')">
+            <span class="opt-letter">A</span>
+            <span>Por un grupo de amigos en común en el instituto</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q1','B')">
+            <span class="opt-letter">B</span>
+            <span>En una red social / plataforma online donde pasábamos horas</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q1','C')">
+            <span class="opt-letter">C</span>
+            <span>Jugando a un videojuego online</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q1','D')">
+            <span class="opt-letter">D</span>
+            <span>En un evento / quedada</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r1q1-reveal">
+          <div class="emoji-big">🥹</div>
+          <p><strong>Nota para ti:</strong> Aquí tú ya sabes la respuesta correcta — adapta las opciones a vuestra historia real. Lo bonito es que recuerde ese primer momento. Cuéntale cómo lo recuerdas tú y dejad que fluya la nostalgia. ¿A que parece que fue ayer?</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r1-q2')" style="display:none;" id="r1q1-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 1 - Q2 -->
+  <div class="screen" id="screen-r1-q2">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 16.6%"></div></div>
+      <div class="question-counter">Ronda 1 · Pregunta 2 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          💬 ¿Cuál fue la primera conversación real que tuvimos? ¿De qué hablamos durante horas aquella primera vez?
+        </div>
+        <div class="question-context">
+          De esas conversaciones que empiezan por algo random y acaban a las 4 de la mañana...
+        </div>
+        <div class="options" id="r1q2-options">
+          <button class="option-btn" onclick="answer(this,'r1q2','A')">
+            <span class="opt-letter">A</span>
+            <span>Sobre música — compartiendo canciones y artistas</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q2','B')">
+            <span class="opt-letter">B</span>
+            <span>Sobre nuestras vidas — fue un desahogo mutuo desde el minuto uno</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q2','C')">
+            <span class="opt-letter">C</span>
+            <span>Sobre un hobby / interés que teníamos en común</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q2','D')">
+            <span class="opt-letter">D</span>
+            <span>Sinceramente ni nos acordamos, pero no paramos de hablar desde entonces</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r1q2-reveal">
+          <div class="emoji-big">💫</div>
+          <p><strong>Lo importante aquí:</strong> No importa si recuerda el tema exacto. Lo que importa es que desde ese primer día, algo hizo clic. Una conexión que no necesitó mucho para ser real.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r1-q3')" style="display:none;" id="r1q2-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 1 - Q3 -->
+  <div class="screen" id="screen-r1-q3">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 25%"></div></div>
+      <div class="question-counter">Ronda 1 · Pregunta 3 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🔮 Alguien de nosotros dijo esta frase. ¿Quién la dijo y en qué momento?<br><br>
+          <span style="font-family:'Caveat',cursive; font-size:1.3rem; color:var(--gold);">
+            «siento que por mucho que pase el tiempo si vuelvo aquí, contigo nada cambia»
+          </span>
+        </div>
+        <div class="options" id="r1q3-options">
+          <button class="option-btn" onclick="answer(this,'r1q3','A')">
+            <span class="opt-letter">A</span>
+            <span>La dije yo, después de una época sin hablar tanto</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q3','B')">
+            <span class="opt-letter">B</span>
+            <span>La dijiste tú, un día random que te pusiste sentimental</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q3','C')">
+            <span class="opt-letter">C</span>
+            <span>La dijimos los dos en diferentes momentos, porque es la pura verdad</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r1q3','D')">
+            <span class="opt-letter">D</span>
+            <span>Fue en una llamada nocturna, cuando volvimos a conectar después de un tiempo</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r1q3-reveal">
+          <div class="emoji-big">🥺</div>
+          <p><strong>Y es que es verdad...</strong> Da igual el tiempo que pase, da igual si hay semanas que cuesta más hablar. Cuando volvéis a conectar, es como si no hubiera pasado ni un día. Eso es lo bonito de lo vuestro.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-t1')" style="display:none;" id="r1q3-next">Ver resultado de ronda →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TRANSITION 1→2                                -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-t1">
+    <div class="transition-screen">
+      <div class="round-number">Entre rondas</div>
+      <img src="https://i.imgur.com/vpo248T.jpeg" alt="" class="transition-img">
+      <div class="transition-quote">
+        «No te haces a la idea de lo mucho que te quiero y de lo importante que eres para mí»
+      </div>
+      <p style="color: var(--text-dim); max-width: 450px; line-height: 1.6; font-size: 0.9rem;">
+        Ronda 1 completada. Y esto es solo el principio... La siguiente ronda va de todas esas veces que has sido mucho más que un amigo. Has sido un guía. 🖤
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r2-intro')" style="margin-top: 20px;">
+        Siguiente ronda →
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ROUND 2 INTRO                                 -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-r2-intro">
+    <div class="round-header">
+      <div class="round-number">Ronda 2 de 4</div>
+      <img src="https://i.imgur.com/vpo248T.jpeg" alt="" class="round-photo">
+      <h2 class="round-title">La voz de la experiencia</h2>
+      <div class="round-quote">
+        «te veo como mi hermano mayor sabes, mi voz de la experiencia»
+      </div>
+      <p class="round-quote-attr">— Porque siempre has sabido qué decir</p>
+      <p class="round-desc">
+        Esta ronda va de todas las veces que has sido el consejero, el que tenía las respuestas, el que me calmaba cuando todo era un caos. Mi hermano mayor a distancia. 🫂
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r2-q1')">Empezar ronda →</button>
+    </div>
+  </div>
+
+  <!-- ROUND 2 - Q1 -->
+  <div class="screen" id="screen-r2-q1">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 33.3%"></div></div>
+      <div class="question-counter">Ronda 2 · Pregunta 1 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🧠 ¿Cuál fue el mejor consejo que me has dado? Ese que todavía llevo conmigo.
+        </div>
+        <div class="question-context">
+          «Cuando me pasa algo, acudo a ti porque siento que tú tienes la solución»
+        </div>
+        <div class="options" id="r2q1-options">
+          <button class="option-btn" onclick="answer(this,'r2q1','A')">
+            <span class="opt-letter">A</span>
+            <span>Algo sobre una relación sentimental que me estaba complicando la vida</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q1','B')">
+            <span class="opt-letter">B</span>
+            <span>Sobre el futuro, los estudios o el trabajo — me centraste cuando estaba perdido</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q1','C')">
+            <span class="opt-letter">C</span>
+            <span>Un "tío, déjalo, no merece la pena" que necesitaba escuchar</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q1','D')">
+            <span class="opt-letter">D</span>
+            <span>Todos. Cada vez que hablamos me das alguno sin darte cuenta</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r2q1-reveal">
+          <div class="emoji-big">💡</div>
+          <p>Lo mejor de tus consejos es que nunca los das desde arriba. Los das desde el «tío, yo te quiero y no quiero verte mal». Y eso es lo que los hace tan valiosos.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r2-q2')" style="display:none;" id="r2q1-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 2 - Q2 -->
+  <div class="screen" id="screen-r2-q2">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 41.6%"></div></div>
+      <div class="question-counter">Ronda 2 · Pregunta 2 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🌪️ ¿Cuál fue la mayor locura o decisión loca en la que me apoyaste sin dudarlo?
+        </div>
+        <div class="question-context">
+          Esa vez que cualquier otra persona me habría dicho "estás loco", pero tú dijiste "pues adelante, yo estoy contigo".
+        </div>
+        <div class="options" id="r2q2-options">
+          <button class="option-btn" onclick="answer(this,'r2q2','A')">
+            <span class="opt-letter">A</span>
+            <span>Cuando quise cambiar algo importante en mi vida y todos dudaban menos tú</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q2','B')">
+            <span class="opt-letter">B</span>
+            <span>Alguna aventura nocturna / plan improvisado que salió genial (o fatal, pero juntos)</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q2','C')">
+            <span class="opt-letter">C</span>
+            <span>Una decisión sentimental que era arriesgada pero tú me diste el empujón</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q2','D')">
+            <span class="opt-letter">D</span>
+            <span>Literalmente todas — tú nunca me juzgas, simplemente me apoyas</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r2q2-reveal">
+          <div class="emoji-big">🫂</div>
+          <p><em>«Tío eres mi mejor amigo, como no voy a estar para ti»</em> — Eso dijiste. Y lo cumples cada vez. No hace falta más.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r2-q3')" style="display:none;" id="r2q2-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 2 - Q3 -->
+  <div class="screen" id="screen-r2-q3">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 50%"></div></div>
+      <div class="question-counter">Ronda 2 · Pregunta 3 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          💔 ¿Cuál fue el peor momento que he pasado en el que tú estuviste ahí sin fallar?
+        </div>
+        <div class="question-context">
+          «Siempre serás un pilar fundamental» — Y en ese momento lo demostraste más que nunca.
+        </div>
+        <div class="options" id="r2q3-options">
+          <button class="option-btn" onclick="answer(this,'r2q3','A')">
+            <span class="opt-letter">A</span>
+            <span>Cuando pasé por una mala racha personal y no sabía cómo salir</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q3','B')">
+            <span class="opt-letter">B</span>
+            <span>Cuando perdí a alguien importante o tuve un problema familiar</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q3','C')">
+            <span class="opt-letter">C</span>
+            <span>Cuando una relación me destrozó y tú recogiste las piezas por llamada</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r2q3','D')">
+            <span class="opt-letter">D</span>
+            <span>No fue un momento concreto, es que siempre estás en los malos sin que te lo pida</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r2q3-reveal">
+          <div class="emoji-big">🤍</div>
+          <p>Y es que eso es lo que te hace diferente. No esperas a que te pida ayuda. Simplemente... estás. Y en los peores momentos, eso lo es todo.<br><br><em>«Muchas veces no te lo digo, es más no te lo digo nunca. Pero gracias por haberte quedado siempre»</em></p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-t2')" style="display:none;" id="r2q3-next">Ver transición →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TRANSITION 2→3                                -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-t2">
+    <div class="transition-screen">
+      <div class="round-number">Respira hondo...</div>
+      <img src="https://i.imgur.com/0Tvfh32.jpeg" alt="" class="transition-img">
+      <div class="transition-quote">
+        «es que para mí eres eso, mi día a día, te lo cuento todo»
+      </div>
+      <p style="color: var(--text-dim); max-width: 450px; line-height: 1.6; font-size: 0.9rem;">
+        Dos rondas completadas. Y ahora viene la más especial... porque esta va sobre lo imposible que hemos hecho posible: mantener algo tan real, tan bonito, a kilómetros de distancia. 🌍🖤
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r3-intro')" style="margin-top: 20px;">
+        Siguiente ronda →
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ROUND 3 INTRO                                 -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-r3-intro">
+    <div class="round-header">
+      <div class="round-number">Ronda 3 de 4</div>
+      <img src="https://i.imgur.com/0Tvfh32.jpeg" alt="" class="round-photo">
+      <h2 class="round-title">A kilómetros</h2>
+      <div class="round-quote">
+        «Ni tú tampoco te haces a la idea de lo que significas para mí… hemos creado algo tan real y tan bonito cuando realmente es imposible, porque a distancia las cosas son más complicadas, que a día de hoy me conoces mejor que alguien que está irl»
+      </div>
+      <p class="round-quote-attr">— La frase que lo resume todo</p>
+      <p class="round-desc">
+        Esta ronda va de cómo hemos roto las reglas de la distancia. De cómo hemos construido algo que la gente a veces no entiende, pero nosotros sí. 🌍
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r3-q1')">Empezar ronda →</button>
+    </div>
+  </div>
+
+  <!-- ROUND 3 - Q1 -->
+  <div class="screen" id="screen-r3-q1">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 58.3%"></div></div>
+      <div class="question-counter">Ronda 3 · Pregunta 1 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          📱 ¿Cuántas veces nos hemos visto en persona desde que nos conocemos?
+        </div>
+        <div class="question-context">
+          Porque lo loco de lo nuestro es que no necesitamos vernos para que esto sea real.
+        </div>
+        <div class="options" id="r3q1-options">
+          <button class="option-btn" onclick="answer(this,'r3q1','A')">
+            <span class="opt-letter">A</span>
+            <span>Nunca — y aun así eres la persona que mejor me conoce</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r3q1','B')">
+            <span class="opt-letter">B</span>
+            <span>Muy pocas veces — se cuentan con los dedos de una mano</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r3q1','C')">
+            <span class="opt-letter">C</span>
+            <span>Unas cuantas, pero siempre menos de las que nos gustaría</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r3q1','D')">
+            <span class="opt-letter">D</span>
+            <span>Las suficientes para saber que cada reencuentro es como volver a casa</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r3q1-reveal">
+          <div class="emoji-big">🌍</div>
+          <p>Da igual el número. Lo que importa es que cada vez que conectáis — sea por pantalla o en persona — el mundo se para un momento. Y eso no lo tiene cualquiera.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r3-q2')" style="display:none;" id="r3q1-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 3 - Q2 -->
+  <div class="screen" id="screen-r3-q2">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 66.6%"></div></div>
+      <div class="question-counter">Ronda 3 · Pregunta 2 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🤫 Dime algo que sepas de mí que la mayoría de gente que me rodea no sabe.
+        </div>
+        <div class="question-context">
+          Esta no tiene opciones. Es tu momento de demostrar que me conoces mejor que nadie que esté "irl". Dilo en voz alta. 🎤
+        </div>
+        <div class="options" id="r3q2-options">
+          <button class="option-btn" onclick="answer(this,'r3q2','A')" style="background: rgba(200,162,255,0.08); border-color: var(--accent);">
+            <span class="opt-letter">🖤</span>
+            <span><strong>Pregunta abierta:</strong> Que lo diga en voz alta. Lo que sea. Algo que solo él sepa de ti.</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r3q2-reveal">
+          <div class="emoji-big">🥹</div>
+          <p>Sea lo que sea que haya dicho... tiene razón. Porque te conoce de verdad. No de esa forma superficial. Te conoce en lo profundo, en lo que no se ve, en lo que no cuentas a cualquiera.<br><br><em>«nene tú sabes que yo voy a estar siempre, no hace falta que hablemos cada día para saber que eres importante en mi vida ❤️»</em></p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r3-q3')" style="display:none;" id="r3q2-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 3 - Q3 -->
+  <div class="screen" id="screen-r3-q3">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 75%"></div></div>
+      <div class="question-counter">Ronda 3 · Pregunta 3 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🎵 ¿Cuál es la canción, serie, peli o algo que siempre vamos a asociar el uno con el otro?
+        </div>
+        <div class="question-context">
+          Eso que cada vez que suena o aparece piensas: "esto me recuerda a él".
+        </div>
+        <div class="options" id="r3q3-options">
+          <button class="option-btn" onclick="answer(this,'r3q3','A')">
+            <span class="opt-letter">A</span>
+            <span>'Colegas' de Babi — obviamente (si no, ¿qué hacemos aquí? 😂)</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r3q3','B')">
+            <span class="opt-letter">B</span>
+            <span>Otra canción que es "nuestra" desde hace años</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r3q3','C')">
+            <span class="opt-letter">C</span>
+            <span>Una serie o peli que vimos juntos (cada uno en su casa, pero juntos)</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r3q3','D')">
+            <span class="opt-letter">D</span>
+            <span>Todo. Cualquier cosa me recuerda a ti de alguna forma</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r3q3-reveal">
+          <div class="emoji-big">🎶</div>
+          <p>Da igual la respuesta. Lo bonito es que hay cosas en este mundo que ya son vuestras. Que aunque estéis lejos, os conectan sin necesidad de decir nada. Eso es lo que hace que esto sea tan especial.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-t3')" style="display:none;" id="r3q3-next">Ver transición →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- TRANSITION 3→4                                -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-t3">
+    <div class="transition-screen">
+      <div class="round-number">Última ronda...</div>
+      <img src="https://i.imgur.com/Ra9ycoz.jpeg" alt="" class="transition-img">
+      <div class="transition-quote">
+        «Gracias por seguir año tras año conmigo de la manita» 🤝
+      </div>
+      <p style="color: var(--text-dim); max-width: 450px; line-height: 1.6; font-size: 0.9rem;">
+        Quedan solo 3 preguntas. Pero estas son las más importantes. Porque hablan de lo que viene. De lo que siempre será. Prepárate. 🖤
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r4-intro')" style="margin-top: 20px;">
+        Última ronda →
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- ROUND 4 INTRO                                 -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-r4-intro">
+    <div class="round-header">
+      <div class="round-number">Ronda 4 de 4 — La última</div>
+      <img src="https://i.imgur.com/Ra9ycoz.jpeg" alt="" class="round-photo">
+      <h2 class="round-title">Siempre</h2>
+      <div class="round-quote">
+        «Muchas veces no te lo digo, es más no te lo digo nunca. Pero gracias por haberte quedado siempre»
+      </div>
+      <p class="round-quote-attr">— La frase que más cuesta decir</p>
+      <p class="round-desc">
+        Esta ronda va del para siempre. De lo que sientes pero no dices. De las promesas que no hace falta decir en voz alta porque se demuestran cada día. 🤍
+      </p>
+      <button class="btn-next" onclick="goTo('screen-r4-q1')">Empezar ronda →</button>
+    </div>
+  </div>
+
+  <!-- ROUND 4 - Q1 -->
+  <div class="screen" id="screen-r4-q1">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 83.3%"></div></div>
+      <div class="question-counter">Ronda 4 · Pregunta 1 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          ✍️ Alguien de nosotros escribió esto. ¿Quién fue?<br><br>
+          <span style="font-family:'Caveat',cursive; font-size:1.3rem; color:var(--gold);">
+            «Cuando me pasa algo, acudo a ti porque siento que tú tienes la solución»
+          </span>
+        </div>
+        <div class="options" id="r4q1-options">
+          <button class="option-btn" onclick="answer(this,'r4q1','A')">
+            <span class="opt-letter">A</span>
+            <span>Fui yo, porque es la verdad — siempre eres el primero al que llamo</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r4q1','B')">
+            <span class="opt-letter">B</span>
+            <span>Fuiste tú, en un momento vulnerable</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r4q1','C')">
+            <span class="opt-letter">C</span>
+            <span>Es algo que los dos sentimos pero ninguno lo había dicho así</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r4q1','D')">
+            <span class="opt-letter">D</span>
+            <span>Fue en un mensaje largo a las tantas de la madrugada</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r4q1-reveal">
+          <div class="emoji-big">🖤</div>
+          <p>No necesitas tener siempre la respuesta perfecta. A veces basta con estar al otro lado. Con escuchar. Con decir "aquí estoy". Y tú eso lo haces siempre.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r4-q2')" style="display:none;" id="r4q1-next">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 4 - Q2 -->
+  <div class="screen" id="screen-r4-q2">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 91.6%"></div></div>
+      <div class="question-counter">Ronda 4 · Pregunta 2 de 3</div>
+      <div class="question-card">
+        <div class="question-text">
+          🥺 ¿Cuál es la cosa que más te gustaría que pudiéramos hacer juntos si no existiera la distancia?
+        </div>
+        <div class="question-context">
+          Otra pregunta abierta. Quiero que lo diga en voz alta, mirándome a la cámara. 🎤
+        </div>
+        <div class="options" id="r4q2-options">
+          <button class="option-btn" onclick="answer(this,'r4q2','A')" style="background: rgba(200,162,255,0.08); border-color: var(--accent);">
+            <span class="opt-letter">🖤</span>
+            <span><strong>Pregunta abierta:</strong> Que lo diga. Sin filtros. Lo que le salga del corazón.</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r4q2-reveal">
+          <div class="emoji-big">🫂</div>
+          <p>Algún día lo haremos. Algún día romperemos esos kilómetros y estaremos ahí, en persona, sin pantallas de por medio. Y ese día, nada va a cambiar. Porque lo nuestro ya es real, y lo ha sido siempre.</p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="goTo('screen-r4-q3')" style="display:none;" id="r4q2-next">Última pregunta →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROUND 4 - Q3 (ÚLTIMA) -->
+  <div class="screen" id="screen-r4-q3">
+    <div class="question-section">
+      <div class="progress-bar-container"><div class="progress-bar-fill" style="width: 100%"></div></div>
+      <div class="question-counter">Ronda 4 · Pregunta 3 de 3 — LA ÚLTIMA</div>
+      <div class="question-card">
+        <div class="question-text">
+          💛 Última pregunta. La más importante.<br><br>
+          ¿Sabes lo que significas para mí?
+        </div>
+        <div class="options" id="r4q3-options">
+          <button class="option-btn" onclick="answer(this,'r4q3','A')">
+            <span class="opt-letter">A</span>
+            <span>Sí, creo que lo sé</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r4q3','B')">
+            <span class="opt-letter">B</span>
+            <span>Me lo imagino, pero no me lo dices tanto como debería</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r4q3','C')">
+            <span class="opt-letter">C</span>
+            <span>No del todo... pero me gustaría saberlo</span>
+          </button>
+          <button class="option-btn" onclick="answer(this,'r4q3','D')">
+            <span class="opt-letter">D</span>
+            <span>Creo que sí, pero dímelo tú</span>
+          </button>
+        </div>
+        <div class="answer-reveal" id="r4q3-reveal">
+          <div class="emoji-big">🥹</div>
+          <p style="font-family:'Caveat',cursive; font-size:1.3rem; color: var(--gold); text-align:center;">
+            Pues da igual lo que hayas respondido...<br>porque ahora te lo voy a decir yo.
+          </p>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn-next" onclick="showFinalScreen()" style="display:none;" id="r4q3-next">
+          Ver el Gran Final 🖤
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════ -->
+  <!-- THE GRAND FINALE                              -->
+  <!-- ══════════════════════════════════════════════ -->
+  <div class="screen" id="screen-final">
+    <div class="final-screen">
+
+      <div class="final-badge">✦ El Gran Final ✦</div>
+
+      <div class="final-heart">❤️</div>
+
+      <h2 class="final-title">Para ti. Para siempre.</h2>
+
+      <div class="final-photos">
+        <img src="https://i.imgur.com/BKU2pjE.jpeg" alt="">
+        <img src="https://i.imgur.com/vpo248T.jpeg" alt="">
+        <img src="https://i.imgur.com/0Tvfh32.jpeg" alt="">
+        <img src="https://i.imgur.com/Ra9ycoz.jpeg" alt="">
+      </div>
+
+      <div class="final-message-box">
+        <div class="final-message">
+          Pues nada, solo quería decirte algo que aunque no te lo diga tanto y aunque estemos lejos y no podamos vernos todo lo que quisiéramos, para mí eres una de las personas más importantes de mi vida.
+          <br><br>
+          Eres esa persona con la que puedo hablar de cualquier cosa, a cualquier hora y en cualquier momento. El que siempre está ahí, incluso cuando no sabes muy bien qué decir, pero aún así te quedas. Y eso, aunque no lo creas, vale muchísimo.
+          <br><br>
+          Hay días buenos, días malos, días en los que todo pesa, y aun así saber que te tengo al otro lado hace que todo sea un poco más llevadero. Me haces reír cuando lo necesito, me escuchas cuando me desahogo y me apoyas incluso en mis locuras.
+          <br><br>
+          Has estado en momentos importantes de mi vida, aunque no físicamente, y eso dice más que mil cosas. Porque no hace falta estar cerca para ser presente, y tú lo eres de sobra.
+          <br><br>
+          Gracias por ser como eres, por no desaparecer con el tiempo ni con los kilómetros, por seguir ahí como si nada hubiera cambiado, como si fuese el primer día.
+          <br><br>
+          Te quiero un montón, más de lo que a veces sé expresar con palabras.
+          <br><br>
+          <strong>Siempre.</strong>
+        </div>
+        <div class="final-sign">
+          — Tu MAD de siempre "Actúa como un experto creador de juegos virtuales y experiencias emotivas a distancia. Necesito que diseñes un juego tipo 'Quiz interactivo' (para jugar por videollamada o chat) para el cumpleaños de mi mejor amigo. Vivimos muy lejos el uno del otro, por lo que el juego debe estar adaptado a esta distancia. 
+
+> El requisito fundamental es que, mientras jugamos, debe sonar de fondo la canción **'Colegas' de Babi** ([https://www.youtube.com/watch?v=zDcBO_RVU58](https://www.youtube.com/watch?v=zDcBO_RVU58)). La temática del quiz debe tener la misma vibra que la canción: melancólica pero preciosa, hablando de lealtad, de ser un pilar fundamental y de estar ahí en los peores momentos.
+
+> **Quiero que el Quiz se divida en 4 rondas emotivas e incluya textualmente las siguientes frases reales que nos hemos dicho (úsalas como preguntas de '¿Quién dijo esto y por qué?', como pantallas de transición entre niveles, o como la gran revelación final):**
+
+> * 'No te haces a la idea de lo mucho que te quiero y de lo importante que eres para mí'
+
+> * 'Siempre serás un pilar fundamental'
+
+> * 'Ni tú tampoco te haces a la idea de lo que significas para mí… hemos creado algo tan real y tan bonito cuando realmente es imposible, porque a distancia las cosas son más complicadas, que a día de hoy me conoces mejor que alguien que está irl'
+
+> * 'Tío eres mi mejor amigo, como no voy a estar para ti'
+
+> * 'es que para mí eres eso, mi día a día, te lo cuento todo'
+
+> * 'Gracias por seguir año tras año conmigo de la manita'
+
+> * 'nene tú sabes que yo voy a estar siempre, no hace falta que hablemos cada día para saber que eres importante en mi vida <3'
+
+> * 'Es como si tuviese 15 años como cuando te conocí'
+
+> * 'siento que por mucho que pase el tiempo si vuelvo aquí, contigo nada cambia'
+
+> * 'Muchas veces no te lo digo, es más no te lo digo nunca. Pero gracias por haberte quedado siempre'
+
+> * 'Cuando me pasa algo, acudo a ti porque siento que tú tiene la solución'
+
+> * 'te veo como mi hermano mayor sabes, mi voz de la experiencia'
+
+> 
+
+> 
+
+> **Estructura del Quiz que debes desarrollarme:**
+
+> 1. **Instrucciones de preparación:** Cómo hacer la videollamada, en qué momento darle al play a la canción y cómo presentarle el quiz.
+
+> 2. **Ronda 1 - 'Los 15 años':** Preguntas sobre nuestros inicios, anécdotas de cuando nos conocimos y cómo nada ha cambiado desde entonces.
+
+> 3. **Ronda 2 - 'La voz de la experiencia':** Preguntas sobre consejos, locuras en las que me ha apoyado y momentos donde acudí a él porque 'tenía la solución'.
+
+> 4. **Ronda 3 - 'A kilómetros':** Preguntas sobre cómo hemos superado la distancia, demostrando que me conoce mejor que nadie que esté en persona.
+
+> 5. **El Gran Final:** Una diapositiva o momento final donde, justo en el clímax de la canción de Babi, le lea este texto exacto como recompensa por terminar el quiz:
+
+> *'Pues nada, solo quería decirte algo que aunque no te lo diga tanto y aunque estemos lejos y no podamos vernos todo lo que quisiéramos, para mí eres una de las personas más importantes de mi vida. Eres esa persona con la que puedo hablar de cualquier cosa, a cualquier hora y en cualquier momento. El que siempre está ahí, incluso cuando no sabes muy bien qué decir, pero aún así te quedas. Y eso, aunque no lo creas, vale muchísimo. Hay días buenos, días malos, días en los que todo pesa, y aun así saber que te tengo al otro lado hace que todo sea un poco más llevadero. Me haces reír cuando lo necesito, me escuchas cuando me desahogo y me apoyas incluso en mis locuras. Has estado en momentos importantes de mi vida, aunque no físicamente, y eso dice más que mil cosas. Porque no hace falta estar cerca para ser presente, y tú lo eres de sobra. Gracias por ser como eres, por no desaparecer con el tiempo ni con los kilómetros, por seguir ahí como si nada hubiera cambiado, como si fuese el primer día. Te quiero un montón, más de lo que a veces sé expresar con palabras. Siempre.'*
+
+> 
+
+> 
+
+> Redáctame las preguntas del quiz (dándome ideas de qué poner en las opciones múltiples A, B, C y D) y las instrucciones paso a paso con un tono muy cercano, emotivo y preparado para hacerle llorar de emoción."
+
+y ponme estas fotos:
+
+https://i.imgur.com/BKU2pjE.jpeg
+
+https://i.imgur.com/vpo248T.jpeg
+
+https://i.imgur.com/0Tvfh32.jpeg
+
+https://i.imgur.com/Ra9ycoz.jpeg
+
+
+        </div>
+      </div>
+
+      <div class="final-song-note">
+        🎵 Babi — <em>Colegas</em> · la canción que suena cuando pienso en ti
+      </div>
+
+      <div style="margin-top: 30px;">
+        <p style="font-family:'Caveat',cursive; font-size: 1.5rem; color: var(--accent); animation: heartbeat 2s ease-in-out infinite;">
+          Feliz cumpleaños, MAD 🎂🖤
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /game-container -->
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- JAVASCRIPT                                     -->
+<!-- ═══════════════════════════════════════════════ -->
+<script>
+  // ── PARTICLES BACKGROUND ──
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  class Particle {
+    constructor() {
+      this.reset();
+    }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 2 + 0.5;
+      this.speedY = -(Math.random() * 0.3 + 0.1);
+      this.speedX = (Math.random() - 0.5) * 0.2;
+      this.opacity = Math.random() * 0.4 + 0.1;
+      this.color = Math.random() > 0.5 ? '200,162,255' : '240,194,127';
+    }
+    update() {
+      this.y += this.speedY;
+      this.x += this.speedX;
+      if (this.y < -10) {
+        this.y = canvas.height + 10;
+        this.x = Math.random() * canvas.width;
+      }
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+      ctx.fill();
+    }
+  }
+
+  for (let i = 0; i < 60; i++) particles.push(new Particle());
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(animateParticles);
+  }
+  animateParticles();
+
+  // ── GAME STATE ──
+  let score = 0;
+  let totalQuestions = 12;
+
+  // ── NAVIGATION ──
+  function goTo(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(screenId);
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function startQuiz() {
+    goTo('screen-r1-intro');
+    document.getElementById('musicBar').classList.add('visible');
+    document.getElementById('scoreBadge').classList.add('visible');
+  }
+
+  // ── ANSWER HANDLER ──
+  function answer(btn, qId, letter) {
+    const optionsContainer = document.getElementById(qId + '-options');
+    const allBtns = optionsContainer.querySelectorAll('.option-btn');
+
+    // Disable all buttons
+    allBtns.forEach(b => {
+      b.classList.add('disabled');
+    });
+
+    // Mark selected as correct (every answer is valid in this quiz)
+    btn.classList.add('correct');
+
+    // Increment score
+    score++;
+    document.getElementById('scoreNum').textContent = score;
+
+    // Show reveal
+    const reveal = document.getElementById(qId + '-reveal');
+    reveal.classList.add('show');
+
+    // Show next button
+    const nextBtn = document.getElementById(qId + '-next');
+    if (nextBtn) {
+      nextBtn.style.display = 'inline-flex';
+      setTimeout(() => {
+        nextBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+  }
+
+  // ── FINAL SCREEN ──
+  function showFinalScreen() {
+    goTo('screen-final');
+    document.getElementById('scoreBadge').style.display = 'none';
+    launchConfetti();
+  }
+
+  // ── CONFETTI ──
+  function launchConfetti() {
+    const colors = ['#c8a2ff', '#f0c27f', '#7b5ea7', '#ff7eb3', '#6ecf8e', '#fff', '#ffd700'];
+    const shapes = ['circle', 'square'];
+
+    for (let i = 0; i < 80; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        const size = Math.random() * 10 + 5;
+        el.style.width = size + 'px';
+        el.style.height = size + 'px';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.top = '-20px';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        el.style.animationDelay = '0s';
+        document.body.appendChild(el);
+
+        setTimeout(() => el.remove(), 5000);
+      }, i * 50);
+    }
+  }
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a055e5107aa2aa13',t:'MTc4MDM5NzQwMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
