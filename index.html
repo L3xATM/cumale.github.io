@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🎂 Quiz de Cumpleaños — Para ti, hermanita fav 🖤 </title>
-<audio src="Colegas.mp3" autoplay>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;500;600;700&display=swap');
 
@@ -643,6 +642,9 @@
   .music-bar .song-info {
     font-size: 0.8rem;
     color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
   .music-bar .song-info strong {
     color: var(--accent);
@@ -665,6 +667,22 @@
   .music-bar .eq-bars span:nth-child(3) { height: 8px; animation-delay: 0.4s; }
   .music-bar .eq-bars span:nth-child(4) { height: 15px; animation-delay: 0.1s; }
   .music-bar .eq-bars span:nth-child(5) { height: 10px; animation-delay: 0.3s; }
+
+  .music-control-btn {
+    background: rgba(200, 162, 255, 0.15);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    border-radius: 20px;
+    padding: 4px 12px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.3s;
+  }
+  .music-control-btn:hover {
+    background: var(--accent);
+    color: var(--bg-dark);
+  }
 
   @keyframes eq {
     from { height: 4px; }
@@ -724,13 +742,17 @@
 
 <canvas id="particles-canvas"></canvas>
 
+<!-- Contenedor oculto requerido por la API de YouTube para reproducir el audio -->
+<div id="youtube-audio-player" style="position: absolute; top: -9999px; left: -9999px; width: 0; height: 0; pointer-events: none;"></div>
+
 <!-- ═══════════ MUSIC BAR ═══════════ -->
 <div class="music-bar" id="musicBar">
-  <div class="eq-bars">
+  <div class="eq-bars" id="eqBars">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
   <div class="song-info">
-    🎵 <strong>Babi — Colegas</strong> sonando de fondo
+    <span>🎵 <strong>Babi — Colegas</strong> sonando de fondo</span>
+    <button class="music-control-btn" id="togglePlayBtn" onclick="toggleMusic()">⏸ Pausar</button>
   </div>
 </div>
 
@@ -799,9 +821,7 @@
         <div class="step">
           <div class="step-number">3</div>
           <div class="step-text">
-            <strong>Dale al play a <em>'Colegas' de Babi</em></strong> — Justo cuando avances a la primera ronda, pon la canción de fondo. Puede sonar bajita, solo para que la melodía acompañe cada pregunta. 🎵<br><br>
-            <a href="https://www.youtube.com/watch?v=zDcBO_RVU58" target="_blank" style="color: var(--accent); text-decoration: underline;">▶ YouTube — Babi: Colegas</a><br>
-            <a href="https://open.spotify.com/track/2cCAtgB5XDZJSRYzA6kmWY" target="_blank" style="color: var(--correct); text-decoration: underline;">▶ Spotify — Babi: Colegas</a>
+            <strong>La música sonará automáticamente</strong> — Al avanzar a la primera ronda, el juego intentará reproducir de fondo la hermosa canción de Babi. Si por restricciones de su navegador no arranca sola, podéis darle manualmente al botón "▶ Reproducir" que aparecerá abajo en la esquina inferior derecha. 🎵
           </div>
         </div>
 
@@ -815,7 +835,7 @@
         <div class="step">
           <div class="step-number">5</div>
           <div class="step-text">
-            <strong>El Gran Final</strong> — Cuando lleguéis al final, pon la canción de nuevo si se ha acabado. Y léele el mensaje despacio, con calma, mirándole a los ojos a través de la pantalla. Ese momento es para vosotros. 🥺
+            <strong>El Gran Final</strong> — Cuando lleguéis al final, la melodía se reiniciará para acompañar el clímax. Léele el mensaje despacio, con calma, mirándole a los ojos a través de la pantalla. Ese momento es para vosotros. 🥺
           </div>
         </div>
 
@@ -1183,7 +1203,7 @@
       <div class="question-counter">Ronda 3 · Pregunta 1 de 3</div>
       <div class="question-card">
         <div class="question-text">
-          📱 ¿Cuántas veces nos hemos visto en persona desde que nos conocemos?
+          🌍 ¿Cuántas veces nos hemos visto en persona desde que nos conocemos?
         </div>
         <div class="question-context">
           Porque lo loco de lo nuestro es que no necesitamos vernos para que esto sea real.
@@ -1474,71 +1494,7 @@
           <strong>Siempre.</strong>
         </div>
         <div class="final-sign">
-          — Tu MAD de siempre "Actúa como un experto creador de juegos virtuales y experiencias emotivas a distancia. Necesito que diseñes un juego tipo 'Quiz interactivo' (para jugar por videollamada o chat) para el cumpleaños de mi mejor amigo. Vivimos muy lejos el uno del otro, por lo que el juego debe estar adaptado a esta distancia. 
-
-> El requisito fundamental es que, mientras jugamos, debe sonar de fondo la canción **'Colegas' de Babi** ([https://www.youtube.com/watch?v=zDcBO_RVU58](https://www.youtube.com/watch?v=zDcBO_RVU58)). La temática del quiz debe tener la misma vibra que la canción: melancólica pero preciosa, hablando de lealtad, de ser un pilar fundamental y de estar ahí en los peores momentos.
-
-> **Quiero que el Quiz se divida en 4 rondas emotivas e incluya textualmente las siguientes frases reales que nos hemos dicho (úsalas como preguntas de '¿Quién dijo esto y por qué?', como pantallas de transición entre niveles, o como la gran revelación final):**
-
-> * 'No te haces a la idea de lo mucho que te quiero y de lo importante que eres para mí'
-
-> * 'Siempre serás un pilar fundamental'
-
-> * 'Ni tú tampoco te haces a la idea de lo que significas para mí… hemos creado algo tan real y tan bonito cuando realmente es imposible, porque a distancia las cosas son más complicadas, que a día de hoy me conoces mejor que alguien que está irl'
-
-> * 'Tío eres mi mejor amigo, como no voy a estar para ti'
-
-> * 'es que para mí eres eso, mi día a día, te lo cuento todo'
-
-> * 'Gracias por seguir año tras año conmigo de la manita'
-
-> * 'nene tú sabes que yo voy a estar siempre, no hace falta que hablemos cada día para saber que eres importante en mi vida <3'
-
-> * 'Es como si tuviese 15 años como cuando te conocí'
-
-> * 'siento que por mucho que pase el tiempo si vuelvo aquí, contigo nada cambia'
-
-> * 'Muchas veces no te lo digo, es más no te lo digo nunca. Pero gracias por haberte quedado siempre'
-
-> * 'Cuando me pasa algo, acudo a ti porque siento que tú tiene la solución'
-
-> * 'te veo como mi hermano mayor sabes, mi voz de la experiencia'
-
-> 
-
-> 
-
-> **Estructura del Quiz que debes desarrollarme:**
-
-> 1. **Instrucciones de preparación:** Cómo hacer la videollamada, en qué momento darle al play a la canción y cómo presentarle el quiz.
-
-> 2. **Ronda 1 - 'Los 15 años':** Preguntas sobre nuestros inicios, anécdotas de cuando nos conocimos y cómo nada ha cambiado desde entonces.
-
-> 3. **Ronda 2 - 'La voz de la experiencia':** Preguntas sobre consejos, locuras en las que me ha apoyado y momentos donde acudí a él porque 'tenía la solución'.
-
-> 4. **Ronda 3 - 'A kilómetros':** Preguntas sobre cómo hemos superado la distancia, demostrando que me conoce mejor que nadie que esté en persona.
-
-> 5. **El Gran Final:** Una diapositiva o momento final donde, justo en el clímax de la canción de Babi, le lea este texto exacto como recompensa por terminar el quiz:
-
-> *'Pues nada, solo quería decirte algo que aunque no te lo diga tanto y aunque estemos lejos y no podamos vernos todo lo que quisiéramos, para mí eres una de las personas más importantes de mi vida. Eres esa persona con la que puedo hablar de cualquier cosa, a cualquier hora y en cualquier momento. El que siempre está ahí, incluso cuando no sabes muy bien qué decir, pero aún así te quedas. Y eso, aunque no lo creas, vale muchísimo. Hay días buenos, días malos, días en los que todo pesa, y aun así saber que te tengo al otro lado hace que todo sea un poco más llevadero. Me haces reír cuando lo necesito, me escuchas cuando me desahogo y me apoyas incluso en mis locuras. Has estado en momentos importantes de mi vida, aunque no físicamente, y eso dice más que mil cosas. Porque no hace falta estar cerca para ser presente, y tú lo eres de sobra. Gracias por ser como eres, por no desaparecer con el tiempo ni con los kilómetros, por seguir ahí como si nada hubiera cambiado, como si fuese el primer día. Te quiero un montón, más de lo que a veces sé expresar con palabras. Siempre.'*
-
-> 
-
-> 
-
-> Redáctame las preguntas del quiz (dándome ideas de qué poner en las opciones múltiples A, B, C y D) y las instrucciones paso a paso con un tono muy cercano, emotivo y preparado para hacerle llorar de emoción."
-
-y ponme estas fotos:
-
-https://i.imgur.com/BKU2pjE.jpeg
-
-https://i.imgur.com/vpo248T.jpeg
-
-https://i.imgur.com/0Tvfh32.jpeg
-
-https://i.imgur.com/Ra9ycoz.jpeg
-
-
+          — Tu MAD de siempre 🖤
         </div>
       </div>
 
@@ -1558,9 +1514,53 @@ https://i.imgur.com/Ra9ycoz.jpeg
 </div><!-- /game-container -->
 
 <!-- ═══════════════════════════════════════════════ -->
-<!-- JAVASCRIPT                                     -->
+<!-- JAVASCRIPT & YOUTUBE API LOADER                -->
 <!-- ═══════════════════════════════════════════════ -->
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
+  // ── INTEGRACIÓN YOUTUBE AUDIO PLAYER ──
+  let player;
+  function onYouTubeIframeAPIReady() {
+    player = new YT.Player('youtube-audio-player', {
+      height: '0',
+      width: '0',
+      videoId: 'zDcBO_RVU58',
+      playerVars: {
+        'autoplay': 0,
+        'controls': 0,
+        'loop': 1,
+        'playlist': 'zDcBO_RVU58', // Requerido por YouTube para hacer bucles
+        'modestbranding': 1,
+        'rel': 0
+      },
+      events: {
+        'onStateChange': onPlayerStateChange
+      }
+    });
+  }
+
+  function onPlayerStateChange(event) {
+    const btn = document.getElementById('togglePlayBtn');
+    const eq = document.getElementById('eqBars');
+    if (event.data === YT.PlayerState.PLAYING) {
+      if(btn) btn.textContent = '⏸ Pausar';
+      if(eq) eq.style.opacity = '1';
+    } else {
+      if(btn) btn.textContent = '▶ Reproducir';
+      if(eq) eq.style.opacity = '0.3'; // El ecualizador se atenúa si se pausa
+    }
+  }
+
+  function toggleMusic() {
+    if (!player || typeof player.getPlayerState !== 'function') return;
+    const state = player.getPlayerState();
+    if (state === YT.PlayerState.PLAYING) {
+      player.pauseVideo();
+    } else {
+      player.playVideo();
+    }
+  }
+
   // ── PARTICLES BACKGROUND ──
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
@@ -1627,6 +1627,11 @@ https://i.imgur.com/Ra9ycoz.jpeg
     goTo('screen-r1-intro');
     document.getElementById('musicBar').classList.add('visible');
     document.getElementById('scoreBadge').classList.add('visible');
+    
+    // Forzamos la reproducción gracias al evento "Click" del usuario (Bypassea bloqueos)
+    if (player && typeof player.playVideo === 'function') {
+      player.playVideo();
+    }
   }
 
   // ── ANSWER HANDLER ──
@@ -1665,6 +1670,12 @@ https://i.imgur.com/Ra9ycoz.jpeg
     goTo('screen-final');
     document.getElementById('scoreBadge').style.display = 'none';
     launchConfetti();
+    
+    // Reinicia la canción desde el segundo cero para el gran final emotivo
+    if (player && typeof player.seekTo === 'function') {
+      player.seekTo(0);
+      player.playVideo();
+    }
   }
 
   // ── CONFETTI ──
@@ -1692,6 +1703,5 @@ https://i.imgur.com/Ra9ycoz.jpeg
     }
   }
 </script>
-
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a055e5107aa2aa13',t:'MTc4MDM5NzQwMQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
